@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Inter:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-bodoni: 'Bodoni Moda', Didot, 'Bodoni MT', Georgia, serif;
+    --font-inter: 'Inter', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0A0A0A;
+    color: #F5F2EC;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  ::selection {
+    background-color: #3B72B5;
+    color: #F5F2EC;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: inherit;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}
+
+@layer components {
+  .input-editorial {
+    @apply bg-transparent border-0 border-b w-full py-2 font-body text-sm transition-colors duration-200 outline-none;
+    border-bottom: 1px solid rgba(155, 155, 155, 0.3);
+    color: inherit;
+  }
+
+  .input-editorial:focus {
+    border-bottom-color: #3B72B5;
+  }
+
+  .input-editorial::placeholder {
+    color: rgba(155, 155, 155, 0.45);
+    font-style: italic;
+  }
+
+  .input-editorial-dark {
+    @apply input-editorial;
+    color: #0A0A0A;
+    border-bottom-color: rgba(26, 26, 26, 0.25);
+  }
+
+  .input-editorial-dark:focus {
+    border-bottom-color: #3B72B5;
+  }
+
+  .btn-primary-dark {
+    @apply w-full bg-midnight text-ivory py-4 text-[0.6rem] tracking-[0.25em] uppercase font-body font-medium transition-colors duration-300 hover:bg-charcoal;
+  }
+
+  .btn-primary-light {
+    @apply w-full bg-ivory text-midnight py-4 text-[0.6rem] tracking-[0.25em] uppercase font-body font-medium transition-colors duration-300 hover:bg-platinum;
+  }
+
+  .btn-cerulean {
+    @apply inline-flex items-center gap-2 border border-cerulean text-cerulean px-6 py-3 text-[0.6rem] tracking-[0.2em] uppercase font-body font-medium transition-all duration-300 hover:bg-cerulean hover:text-ivory;
+  }
+
+  .section-label {
+    @apply text-[0.575rem] tracking-[0.28em] uppercase font-body font-medium text-silver;
+  }
+
+  .hairline {
+    @apply border-0 border-t;
+    border-color: rgba(200, 200, 200, 0.1);
+  }
+
+  .hairline-dark {
+    @apply border-0 border-t;
+    border-color: rgba(26, 26, 26, 0.2);
+  }
+
+  .category-pill {
+    @apply text-[0.55rem] tracking-[0.22em] uppercase font-body font-medium pb-1 transition-colors duration-200 cursor-pointer;
+    border-bottom: 1px solid transparent;
+  }
+
+  .category-pill.active {
+    @apply text-ivory;
+    border-bottom-color: #3B72B5;
+  }
+
+  .category-pill:not(.active) {
+    @apply text-silver hover:text-platinum;
+  }
+}
+
+@layer utilities {
+  .text-masthead {
+    font-family: var(--font-bodoni), Didot, serif;
+    font-style: italic;
+    letter-spacing: 0.06em;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .text-masthead-upright {
+    font-family: var(--font-bodoni), Didot, serif;
+    font-style: normal;
+    letter-spacing: 0.04em;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-150 { animation-delay: 150ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+  .animate-delay-600 { animation-delay: 600ms; }
+  .animate-delay-700 { animation-delay: 700ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in-up,
+    .animate-fade-in,
+    .animate-lift-in {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
