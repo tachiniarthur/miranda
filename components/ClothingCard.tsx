@@ -1,14 +1,14 @@
 'use client'
 
 import { Eye, Pencil, Trash2 } from 'lucide-react'
-import type { WardrobeItem } from '@/lib/mockData'
+import { type ClothingItem, categoryLabel } from '@/lib/types'
 
 interface ClothingCardProps {
-  item: WardrobeItem
+  item: ClothingItem
   index?: number
-  onView: (item: WardrobeItem) => void
-  onEdit: (item: WardrobeItem) => void
-  onDelete: (id: string) => void
+  onView: (item: ClothingItem) => void
+  onEdit: (item: ClothingItem) => void
+  onDelete: (item: ClothingItem) => void
 }
 
 export function ClothingCard({ item, index = 0, onView, onEdit, onDelete }: ClothingCardProps) {
@@ -19,29 +19,25 @@ export function ClothingCard({ item, index = 0, onView, onEdit, onDelete }: Clot
       className="break-inside-avoid mb-5 animate-fade-in-up opacity-0"
       style={{ animationDelay: `${delay}ms`, animationFillMode: 'forwards' }}
     >
-      {/* Visual container */}
+      {/* Visual container — imagem real (fundo removido) sobre superfície neutra */}
       <div
-        className="group relative overflow-hidden cursor-pointer"
-        style={{ aspectRatio: item.aspectRatio, backgroundColor: item.colorHex }}
+        className="group relative overflow-hidden cursor-pointer bg-charcoal"
+        style={{ aspectRatio: '3/4' }}
         onClick={() => onView(item)}
       >
-        {/* Subtle noise texture overlay */}
+        {/* Subtle depth */}
         <div
-          className="absolute inset-0 mix-blend-overlay opacity-[0.04]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,255,255,0.04), transparent 70%)' }}
         />
 
-        {/* Category label — centered, very subtle */}
-        <div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{ color: item.textColor }}
-        >
-          <span className="text-[0.45rem] tracking-[0.35em] uppercase font-body opacity-25 select-none">
-            {item.category}
-          </span>
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.image_url}
+          alt={item.name}
+          className="absolute inset-0 w-full h-full object-contain p-4"
+          loading="lazy"
+        />
 
         {/* Hover action overlay */}
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-250 flex items-center justify-center gap-5">
@@ -61,7 +57,7 @@ export function ClothingCard({ item, index = 0, onView, onEdit, onDelete }: Clot
           </button>
           <button
             className="text-ivory/70 hover:text-red-300 transition-colors duration-150"
-            onClick={e => { e.stopPropagation(); onDelete(item.id) }}
+            onClick={e => { e.stopPropagation(); onDelete(item) }}
             aria-label="Excluir"
           >
             <Trash2 size={14} strokeWidth={1.25} />
@@ -72,11 +68,12 @@ export function ClothingCard({ item, index = 0, onView, onEdit, onDelete }: Clot
       {/* Label */}
       <div className="pt-2.5 pb-1">
         <div className="flex items-baseline justify-between mb-0.5">
-          <span className="section-label text-[0.5rem]">{item.category}</span>
-          <span className="section-label text-[0.48rem] text-silver/60">{item.size}</span>
+          <span className="section-label text-[0.5rem]">{categoryLabel(item.category)}</span>
         </div>
         <p className="font-body text-[0.75rem] text-ivory/75 font-light leading-tight">{item.name}</p>
-        <p className="font-body text-[0.62rem] text-silver mt-0.5">{item.color}</p>
+        {item.cor_primaria && (
+          <p className="font-body text-[0.62rem] text-silver mt-0.5">{item.cor_primaria}</p>
+        )}
       </div>
     </div>
   )

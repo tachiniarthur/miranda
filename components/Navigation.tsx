@@ -1,16 +1,24 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { LogOut } from 'lucide-react'
 import { Masthead } from './Masthead'
+import { logout } from '@/lib/api'
 
 export function Navigation() {
   const pathname = usePathname()
+  const router = useRouter()
 
   const links = [
     { href: '/wardrobe', label: 'Guarda-roupa' },
     { href: '/look', label: 'Look do dia' },
   ]
+
+  function handleLogout() {
+    logout()
+    router.replace('/')
+  }
 
   return (
     <header className="border-b" style={{ borderColor: 'rgba(200,200,200,0.1)' }}>
@@ -34,20 +42,30 @@ export function Navigation() {
           </nav>
         </div>
 
-        {/* Mobile nav */}
-        <nav className="flex md:hidden items-center gap-5">
-          {links.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`section-label text-[0.5rem] transition-colors ${
-                pathname === href ? 'text-ivory' : 'text-silver'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
+        {/* Right side: mobile nav links + logout */}
+        <div className="flex items-center gap-5">
+          <nav className="flex md:hidden items-center gap-5">
+            {links.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`section-label text-[0.5rem] transition-colors ${
+                  pathname === href ? 'text-ivory' : 'text-silver'
+                }`}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 section-label text-silver hover:text-ivory transition-colors duration-200"
+            aria-label="Sair"
+          >
+            <LogOut size={13} strokeWidth={1.5} />
+            <span className="hidden sm:inline">Sair</span>
+          </button>
+        </div>
       </div>
     </header>
   )

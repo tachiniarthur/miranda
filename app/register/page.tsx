@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
+import { register, ApiError } from '@/lib/api'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -14,12 +15,23 @@ export default function RegisterPage() {
   const [confirm, setConfirm] = useState('')
   const [showPwd, setShowPwd] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  function nextStep(e: React.FormEvent) {
+  async function nextStep(e: React.FormEvent) {
     e.preventDefault()
+    setError('')
     if (step < 2) { setStep(2); return }
+    if (password !== confirm) { setError('As senhas não coincidem.'); return }
     setLoading(true)
-    setTimeout(() => router.push('/wardrobe'), 900)
+    try {
+      await register({ name, email, password })
+      router.push('/wardrobe')
+    } catch (err) {
+      // Ex.: e-mail já cadastrado — volta ao passo 1 para o usuário revisar.
+      setError(err instanceof ApiError ? err.message : 'Não foi possível criar a conta.')
+      setLoading(false)
+      if (err instanceof ApiError && err.status === 409) setStep(1)
+    }
   }
 
   return (
@@ -138,6 +150,12 @@ export default function RegisterPage() {
                   />
                 </div>
               </>
+            )}
+
+            {error && (
+              <p className="text-[0.68rem] font-body text-red-600/90 animate-fade-in">
+                {error}
+              </p>
             )}
 
             <div className="pt-3">

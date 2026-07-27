@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
+import { login, ApiError } from '@/lib/api'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -11,11 +12,19 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setError('')
     setLoading(true)
-    setTimeout(() => router.push('/wardrobe'), 800)
+    try {
+      await login({ email, password })
+      router.push('/wardrobe')
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Não foi possível entrar.')
+      setLoading(false)
+    }
   }
 
   return (
@@ -143,6 +152,12 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            {error && (
+              <p className="text-[0.68rem] font-body text-red-600/90 -mt-3 animate-fade-in">
+                {error}
+              </p>
+            )}
 
             <div className="pt-3">
               <button
